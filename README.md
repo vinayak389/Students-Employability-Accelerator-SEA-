@@ -42,7 +42,6 @@ SEA/
 │
 ├── crew.py
 ├── main.py
-├── requirements.txt
 ├── .env
 └── .gitignore
 ```
@@ -72,7 +71,7 @@ SEA/
 
 ### 2️⃣ Clone the Repository
 ```bash
-git clone https://github.com/your-username/SEA.git
+git clone https://github.com/vinayak389/Students-Employability-Accelerator-SEA-.git
 cd SEA
 ```
 
