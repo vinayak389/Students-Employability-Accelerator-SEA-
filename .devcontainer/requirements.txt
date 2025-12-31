@@ -1,0 +1,8 @@
+crewai 
+crewai-tools 
+langchain 
+langchain-openai 
+openai 
+tavily-python 
+python-dotenv 
+rich
