@@ -90,13 +90,13 @@ Create a `.env` file in the project root directory with the following content:
 ```env
 OPENAI_API_KEY=your_openai_api_key
 TAVILY_API_KEY=your_tavily_api_key
-
+```
 ⚠️ Important
 
 Do NOT commit the .env file to GitHub
 
 The .env file is ignored using .gitignore
-```
+
 ## 5️⃣ Run the Application
 
 Run the application using the following command:
