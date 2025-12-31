@@ -93,3 +93,120 @@ An **AI Interview Preparation Roadmap Generator** that provides role-specific, j
 ## 🎯 Outcome
 
 By addressing these challenges, the Students Employability Accelerator (SEA) provides an **end-to-end employability solution** — from job discovery to resume optimization and interview readiness — all driven by AI and designed specifically for students and early-career professionals.
+
+
+
+🗂️ Project Structure
+SEA/
+├── .devcontainer/
+│   ├── devcontainer.json
+│   ├── Dockerfile
+│   └── requirements.txt
+│
+├── agents/
+│   ├── __init__.py
+│   └── sea_agents.py
+│
+├── tasks/
+│   ├── __init__.py
+│   └── sea_tasks.py
+│
+├── tools/
+│   ├── __init__.py
+│   └── job_search_tool.py
+│
+├── utils/
+│   ├── ats_engine.py
+│   ├── intent_router.py
+│   ├── job_ranker.py
+│   ├── resume_parser.py
+│   └── resume_rewriter.py
+│
+├── crew.py
+├── main.py
+├── requirements.txt
+├── .env
+└── .gitignore
+
+🛠️ Tech Stack
+
+Python 3.11
+
+CrewAI
+
+LangChain
+
+OpenAI API
+
+Tavily API
+
+Docker & VS Code Dev Containers
+
+⚙️ Setup Instructions
+1️⃣ Prerequisites
+
+Docker Desktop
+
+VS Code
+
+VS Code Dev Containers extension
+
+2️⃣ Clone the Repository
+git clone https://github.com/your-username/SEA.git
+cd SEA
+
+3️⃣ Open in Dev Container
+
+In VS Code:
+
+Ctrl + Shift + P → Dev Containers: Reopen in Container
+
+
+Dependencies will be installed automatically.
+
+4️⃣ Environment Variables
+
+Create a .env file in the project root:
+
+OPENAI_API_KEY=your_openai_api_key
+TAVILY_API_KEY=your_tavily_api_key
+
+
+⚠️ Do NOT commit .env to GitHub
+
+5️⃣ Run the Application
+python main.py
+
+🧠 How It Works (High Level)
+
+User query is passed to main.py
+
+intent_router identifies user intent (job search, resume analysis, etc.)
+
+CrewAI agents are created in sea_agents.py
+
+Tasks are executed via sea_tasks.py
+
+Tools and utilities process jobs, resumes, and rankings
+
+Final output is shown in the terminal (or Streamlit in future)
+
+🔐 Security Notes
+
+Never commit API keys
+
+Always rotate keys if exposed
+
+.env is ignored via .gitignore
+
+📌 Future Enhancements
+
+🌐 Streamlit UI
+
+📎 Resume upload (PDF/DOCX)
+
+📈 Job match visualizations
+
+🧠 Skill gap analysis
+
+💾 Job bookmarking
