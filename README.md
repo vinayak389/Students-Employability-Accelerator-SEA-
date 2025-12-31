@@ -100,8 +100,9 @@ The .env file is ignored using .gitignore
 ## 5️⃣ Run the Application
 
 Run the application using the following command:
+```bash
 python main.py
-
+```
 ---
 
 ## 🧠 How It Works (High Level)
