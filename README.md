@@ -169,7 +169,7 @@ SEA/
 ```bash
 git clone https://github.com/your-username/SEA.git
 cd SEA
-
+```
 
 ## 3️⃣ Open in Dev Container
 
@@ -192,7 +192,7 @@ TAVILY_API_KEY=your_tavily_api_key
 Do NOT commit the .env file to GitHub
 
 The .env file is ignored using .gitignore
-
+```
 ## 5️⃣ Run the Application
 
 Run the application using the following command:
