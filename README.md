@@ -1,3 +1,10 @@
+# 🎓 Students Employability Accelerator (SEA)
+
+An AI-powered employability platform designed to help students and early-career professionals
+**discover jobs, optimize resumes, and prepare for interviews** using intelligent agents.
+
+---
+
 ## 🧩 Problem Statements & Solutions
 
 ---
@@ -5,14 +12,16 @@
 ### 🔴 Problem Statement 1: No Unified Job Search Across Multiple Portals
 
 #### Problem
-Students are required to manually search across multiple job portals such as LinkedIn, Naukri, Indeed, Glassdoor, and Foundit.  
-This process is time-consuming, inefficient, and often leads to missing relevant job opportunities.
+Students must manually search across multiple job portals such as LinkedIn, Naukri, Indeed,
+Glassdoor, and Foundit. This process is time-consuming, inefficient, and often results in
+missing relevant job opportunities.
 
 #### Solution
-An **AI-powered Unified Job Search Engine** that aggregates job listings from multiple public portals, ranks them based on the student’s aspirational role and resume, and presents them in a single consolidated view.
+An **AI-powered Unified Job Search Engine** that aggregates job listings from multiple portals,
+ranks them based on aspirational role and resume relevance, and presents them in a single view.
 
 #### Expected Deliverables
-- **Tabular list of matched jobs**, including:
+- Tabular list of matched jobs:
   - Job Title  
   - Company Name  
   - Location  
@@ -22,19 +31,20 @@ An **AI-powered Unified Job Search Engine** that aggregates job listings from mu
   - Matching Rationale  
   - One-line Role Summary  
   - Expandable Full Job Description
-- Ability to **bookmark / save jobs**
-- **Application status markers** (Applied, In Progress, Shortlisted, Rejected)
+- Ability to bookmark / save jobs
+- Application status markers (Applied, In Progress, Shortlisted, Rejected)
 
 ---
 
 ### 🔴 Problem Statement 2: No Clarity on Resume ↔ Job Description Fit
 
 #### Problem
-Students do not understand why their resumes are rejected by ATS systems or HR teams.  
-They lack visibility into skill gaps, missing keywords, weak sections, and misalignment with job requirements.
+Students do not understand why resumes get rejected by ATS systems or HR teams. There is no
+visibility into skill gaps, missing keywords, or weak resume sections.
 
 #### Solution
-A **Resume vs Job Description Analysis & ATS Scoring Engine** that quantitatively and qualitatively evaluates resume–JD alignment.
+A **Resume vs Job Description Analysis & ATS Scoring Engine** that evaluates alignment both
+quantitatively and qualitatively.
 
 #### Deliverables
 - ATS Compatibility Score (%)
@@ -51,20 +61,20 @@ A **Resume vs Job Description Analysis & ATS Scoring Engine** that quantitativel
 ### 🔴 Problem Statement 3: Inability to Rewrite Resume to Match Job Description
 
 #### Problem
-Even after identifying gaps, students struggle to professionally rewrite their resumes.  
-They lack guidance on keyword integration, impact-driven bullet points, and structured storytelling.
+Even after identifying gaps, students struggle to professionally rewrite resumes with
+impact-driven bullet points and ATS-friendly keywords.
 
 #### Solution
-An **AI-powered Resume Customization & Rewrite Engine** tailored for each job description.
+An **AI-powered Resume Customization & Rewrite Engine** tailored to each job description.
 
 #### Deliverables
-- AI-optimized resume content:
+- AI-optimized resume sections:
   - Professional Summary
   - Enhanced Experience Bullet Points (STAR format)
   - Improved Project Descriptions
   - Optimized Skills Section
   - Recommended ATS Keywords
-- Side-by-side **Original vs Optimized Resume Comparison**
+- Side-by-side Original vs Optimized Resume comparison
 - Copy-to-clipboard functionality
 - Downloadable tailored resume (PDF / DOCX)
 
@@ -73,15 +83,15 @@ An **AI-powered Resume Customization & Rewrite Engine** tailored for each job de
 ### 🔴 Problem Statement 4: No Structured Interview Preparation After Applying
 
 #### Problem
-After applying or getting shortlisted, students lack a clear and structured interview preparation strategy.
+Students lack a structured interview preparation plan after applying or getting shortlisted.
 
 #### Solution
-An **AI Interview Preparation Roadmap Generator** that provides role-specific, job-aligned interview readiness guidance.
+An **AI Interview Preparation Roadmap Generator** providing job-specific interview readiness.
 
 #### Deliverables
 - Personalized Interview Preparation Kit:
   - 7 / 14 / 30-day preparation roadmap
-  - Job Description–specific technical questions
+  - Job-specific technical questions
   - Behavioral questions with model answers
   - Skill revision topics
   - Mock interview script
@@ -92,121 +102,40 @@ An **AI Interview Preparation Roadmap Generator** that provides role-specific, j
 
 ## 🎯 Outcome
 
-By addressing these challenges, the Students Employability Accelerator (SEA) provides an **end-to-end employability solution** — from job discovery to resume optimization and interview readiness — all driven by AI and designed specifically for students and early-career professionals.
+SEA delivers an **end-to-end employability solution** — from job discovery and resume optimization
+to interview preparation — powered by AI and designed specifically for students.
 
+---
 
+## 🗂️ Project Structure
 
-🗂️ Project Structure
 SEA/
 ├── .devcontainer/
-│   ├── devcontainer.json
-│   ├── Dockerfile
-│   └── requirements.txt
+│ ├── devcontainer.json
+│ ├── Dockerfile
+│ └── requirements.txt
 │
 ├── agents/
-│   ├── __init__.py
-│   └── sea_agents.py
+│ ├── init.py
+│ └── sea_agents.py
 │
 ├── tasks/
-│   ├── __init__.py
-│   └── sea_tasks.py
+│ ├── init.py
+│ └── sea_tasks.py
 │
 ├── tools/
-│   ├── __init__.py
-│   └── job_search_tool.py
+│ ├── init.py
+│ └── job_search_tool.py
 │
 ├── utils/
-│   ├── ats_engine.py
-│   ├── intent_router.py
-│   ├── job_ranker.py
-│   ├── resume_parser.py
-│   └── resume_rewriter.py
+│ ├── ats_engine.py
+│ ├── intent_router.py
+│ ├── job_ranker.py
+│ ├── resume_parser.py
+│ └── resume_rewriter.py
 │
 ├── crew.py
 ├── main.py
 ├── requirements.txt
 ├── .env
 └── .gitignore
-
-🛠️ Tech Stack
-
-Python 3.11
-
-CrewAI
-
-LangChain
-
-OpenAI API
-
-Tavily API
-
-Docker & VS Code Dev Containers
-
-⚙️ Setup Instructions
-1️⃣ Prerequisites
-
-Docker Desktop
-
-VS Code
-
-VS Code Dev Containers extension
-
-2️⃣ Clone the Repository
-git clone https://github.com/your-username/SEA.git
-cd SEA
-
-3️⃣ Open in Dev Container
-
-In VS Code:
-
-Ctrl + Shift + P → Dev Containers: Reopen in Container
-
-
-Dependencies will be installed automatically.
-
-4️⃣ Environment Variables
-
-Create a .env file in the project root:
-
-OPENAI_API_KEY=your_openai_api_key
-TAVILY_API_KEY=your_tavily_api_key
-
-
-⚠️ Do NOT commit .env to GitHub
-
-5️⃣ Run the Application
-python main.py
-
-🧠 How It Works (High Level)
-
-User query is passed to main.py
-
-intent_router identifies user intent (job search, resume analysis, etc.)
-
-CrewAI agents are created in sea_agents.py
-
-Tasks are executed via sea_tasks.py
-
-Tools and utilities process jobs, resumes, and rankings
-
-Final output is shown in the terminal (or Streamlit in future)
-
-🔐 Security Notes
-
-Never commit API keys
-
-Always rotate keys if exposed
-
-.env is ignored via .gitignore
-
-📌 Future Enhancements
-
-🌐 Streamlit UI
-
-📎 Resume upload (PDF/DOCX)
-
-📈 Job match visualizations
-
-🧠 Skill gap analysis
-
-💾 Job bookmarking
