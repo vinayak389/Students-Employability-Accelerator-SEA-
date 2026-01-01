@@ -6,3 +6,4 @@ openai
 tavily-python
 python-dotenv
 rich
+pypdf
