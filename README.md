@@ -90,7 +90,7 @@ streamlit run app_streamlit.py
 3) run app_ngrok_run.py
 ```bash
 python ./app_ngrok_run.py
-
+```
 
 ## 🧠 How It Works (High Level)
 User interacts with the Streamlit UI (job search, resume upload, etc.)
