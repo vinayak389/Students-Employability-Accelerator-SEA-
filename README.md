@@ -1,7 +1,8 @@
 # 🎓 Students Employability Accelerator (SEA)
 
-An AI-powered employability platform designed to help students and early-career professionals
-**discover jobs, optimize resumes, and prepare for interviews** using intelligent agents.
+**SEA** is an AI-powered employability platform designed to help students and early-career professionals **discover jobs, optimize resumes, and prepare for interviews** using intelligent AI agents.
+
+
 
 ---
 
@@ -17,37 +18,23 @@ to interview preparation — powered by AI and designed specifically for student
 ```text
 SEA/
 ├── .devcontainer/
-│   ├── devcontainer.json
-│   ├── Dockerfile
-│   └── requirements.txt
-│
-├── agents/
-│   ├── __init__.py
-│   └── sea_agents.py
-│
-├── tasks/
-│   ├── __init__.py
-│   └── sea_tasks.py
-│
-├── tools/
-│   ├── __init__.py
-│   └── job_search_tool.py
-│
-├── utils/
-│   ├── ats_engine.py
-│   ├── intent_router.py
-│   ├── job_ranker.py
-│   ├── resume_parser.py
-│   └── resume_rewriter.py
-│
-├── crew.py
-├── main.py
+│ └── devcontainer.json
 ├── .env
-└── .gitignore
+├── .gitignore
+├── app.py
+├── app_ngrok_run.py
+├── app_streamlit.py
+├── manager.py
+├── resume_jd_analyzer.py
+├── resume_utils.py
+├── schemas.py
+├── requirements.txt
+└── README.md
 ```
 
 
 ---
+
 
 ## 🛠️ Tech Stack
 
@@ -98,24 +85,37 @@ Do NOT commit the .env file to GitHub
 The .env file is ignored using .gitignore
 
 ## 5️⃣ Run the Application
-
-Run the application using the following command:
+1) Start the FastAPI server
 ```bash
-python main.py
+uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 ```
----
+2) Run the Streamlit frontend
+```bash
+streamlit run app_streamlit.py
+```
+
+3) run app_ngrok_run.py
+```bash
+python ./app_ngrok_run.py
+
 
 ## 🧠 How It Works (High Level)
+User interacts with the Streamlit UI (job search, resume upload, etc.)
 
-1. User input is passed to `main.py`
-2. `intent_router` identifies the user intent  
-   *(job search, resume analysis, etc.)*
-3. CrewAI agents are initialized in `sea_agents.py`
-4. Tasks are executed through `sea_tasks.py`
-5. Tools and utility modules process jobs, resumes, and rankings
-6. Final output is displayed in the terminal  
+Streamlit frontend sends requests to the FastAPI backend
 
-*(A Streamlit-based UI is planned for future versions)*
+Ngrok exposes FastAPI to the internet for remote access if needed
+
+intent_router identifies the user intent (job search, resume analysis, etc.)
+
+CrewAI agents in manager.py process tasks
+
+Tasks and tools in resume_jd_analyzer.py and resume_utils.py handle jobs, resume parsing, scoring, and ranking
+
+Results are returned to Streamlit and displayed to the user in real-time
+
+This architecture enables a lightweight, interactive AI-powered employability platform accessible from any browser.
+
 
 ---
 
@@ -125,12 +125,3 @@ python main.py
 - Always rotate API keys if they are exposed
 - The `.env` file is excluded via `.gitignore`
 
----
-
-## 📌 Future Enhancements
-
-- 🌐 Streamlit-based Web UI
-- 📎 Resume upload support (PDF / DOCX)
-- 📈 Job match and ATS score visualizations
-- 🧠 Skill gap analysis
-- 💾 Job bookmarking and tracking

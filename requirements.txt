@@ -7,3 +7,14 @@ tavily-python
 python-dotenv
 rich
 pypdf
+fastapi
+pydantic
+uvicorn
+python-multipart
+PyPDF2 
+python-docx
+streamlit 
+requests
+pyngrok
+
+
