@@ -6,12 +6,6 @@
 
 ---
 
-## 🎯 Outcome
-
-SEA delivers an **end-to-end employability solution** — from job discovery and resume optimization
-to interview preparation — powered by AI and designed specifically for students.
-
----
 
 ## 📁 Project Structure
 
@@ -37,7 +31,6 @@ SEA/
 
 
 ## 🛠️ Tech Stack
-
 - Python 3.11  
 - CrewAI  
 - LangChain  
@@ -125,3 +118,12 @@ This architecture enables a lightweight, interactive AI-powered employability pl
 - Always rotate API keys if they are exposed
 - The `.env` file is excluded via `.gitignore`
 
+---
+
+
+## 🎯 Outcome
+
+SEA delivers an **end-to-end employability solution** — from job discovery and resume optimization
+to interview preparation — powered by AI and designed specifically for students.
+
+---
