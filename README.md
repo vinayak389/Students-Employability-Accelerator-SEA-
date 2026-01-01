@@ -5,12 +5,6 @@ An AI-powered employability platform designed to help students and early-career 
 
 ---
 
-## 🎯 Outcome
-
-SEA delivers an **end-to-end employability solution** — from job discovery and resume optimization
-to interview preparation — powered by AI and designed specifically for students.
-
----
 
 ## 📁 Project Structure
 
@@ -19,7 +13,6 @@ SEA/
 ├── .devcontainer/
 │   ├── devcontainer.json
 │   ├── Dockerfile
-│   └── requirements.txt
 │
 ├── agents/
 │   ├── __init__.py
@@ -42,6 +35,8 @@ SEA/
 │
 ├── crew.py
 ├── main.py
+├── requirements.txt
+
 ├── .env
 └── .gitignore
 ```
@@ -49,7 +44,7 @@ SEA/
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠️ Tools Required
 
 - Python 3.11  
 - CrewAI  
@@ -134,3 +129,12 @@ python main.py
 - 📈 Job match and ATS score visualizations
 - 🧠 Skill gap analysis
 - 💾 Job bookmarking and tracking
+
+---
+
+## 🎯 Outcome
+
+SEA delivers an **end-to-end employability solution** — from job discovery and resume optimization
+to interview preparation — powered by AI and designed specifically for students.
+
+---
