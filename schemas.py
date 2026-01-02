@@ -27,16 +27,16 @@ class ResumeJDAnalysis(BaseModel):
     improvement_suggestions: List[str]
 
 # -------------------------
-# API Request Models
+# Follow-up Q&A Models
 # -------------------------
-class IntentRequest(BaseModel):
-    user_message: str
-    resume_summary: Optional[str] = None
-    role_description: Optional[str] = None
+class FollowUpQuestionRequest(BaseModel):
+    question: str
+    resume_text: Optional[str] = None
+    job_description: Optional[str] = None
+    analysis_summary: Optional[ResumeJDAnalysis] = None
 
-class ResumeJDRequest(BaseModel):
-    job_description: str
-    resume_text: Optional[str] = None  # optional if uploaded file is provided
+class FollowUpQuestionResponse(BaseModel):
+    answer: str
 
 # -------------------------
 # Unified API Response

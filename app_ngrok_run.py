@@ -1,7 +1,6 @@
 import os
 import time
 import subprocess
-import signal
 import threading
 from pyngrok import ngrok, conf
 from dotenv import load_dotenv
@@ -9,104 +8,85 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # -------------------------
-# Configuration
+# Config
 # -------------------------
 FASTAPI_PORT = 8000
 STREAMLIT_PORT = 8501
-
 NGROK_TOKEN = os.getenv("NGROK_AUTHTOKEN")
+
 if not NGROK_TOKEN:
-    raise ValueError("NGROK_AUTHTOKEN not found in .env file")
+    raise ValueError("NGROK_AUTHTOKEN missing in .env file")
 
 # Set ngrok auth token
 conf.get_default().auth_token = NGROK_TOKEN
 
-# Kill previous ngrok tunnels
+# Kill any existing tunnels
 ngrok.kill()
 print("✅ Previous ngrok tunnels terminated.")
 
 # -------------------------
-# Function to start FastAPI
+# Helper to create ngrok tunnel with retry
+# -------------------------
+def create_ngrok_tunnel(port, max_retries=10, wait=2):
+    for attempt in range(max_retries):
+        try:
+            url = ngrok.connect(port, bind_tls=True)
+            print(f"🌐 ngrok tunnel for port {port}: {url}")
+            return url
+        except Exception as e:
+            print(f"⚠️ Ngrok not ready for port {port}, retry {attempt+1}/{max_retries}...")
+            time.sleep(wait)
+    raise RuntimeError(f"❌ Could not create ngrok tunnel for port {port} after {max_retries} retries")
+
+# -------------------------
+# Start FastAPI
 # -------------------------
 def start_fastapi():
     print("🚀 Starting FastAPI...")
-    fastapi_proc = subprocess.Popen(
+    subprocess.Popen(
         ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", str(FASTAPI_PORT)],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
+        stdout=None,
+        stderr=None,
         preexec_fn=os.setsid
     )
-
-    # Wait a few seconds for uvicorn to boot
     time.sleep(3)
-
-    # Retry loop to expose ngrok
-    max_retries = 10
-    for i in range(max_retries):
-        try:
-            fastapi_url = ngrok.connect(FASTAPI_PORT, bind_tls=True)
-            print(f"🌐 FastAPI public URL: {fastapi_url}")
-            break
-        except Exception as e:
-            print(f"⚠️ Ngrok not ready for FastAPI, retrying ({i+1}/{max_retries})...")
-            time.sleep(1)
-    else:
-        print("❌ Could not create ngrok tunnel for FastAPI.")
-
-    return fastapi_proc
+    return create_ngrok_tunnel(FASTAPI_PORT)
 
 # -------------------------
-# Function to start Streamlit
+# Start Streamlit
 # -------------------------
 def start_streamlit():
     print("🚀 Starting Streamlit...")
-    streamlit_proc = subprocess.Popen(
+    subprocess.Popen(
         ["streamlit", "run", "app_streamlit.py", "--server.port", str(STREAMLIT_PORT)],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
+        stdout=None,
+        stderr=None,
         preexec_fn=os.setsid
     )
-
-    # Wait a few seconds for Streamlit to boot
     time.sleep(5)
-
-    # Retry loop to expose ngrok
-    max_retries = 10
-    for i in range(max_retries):
-        try:
-            streamlit_url = ngrok.connect(STREAMLIT_PORT, bind_tls=True)
-            print(f"🌐 Streamlit public URL: {streamlit_url}")
-            break
-        except Exception as e:
-            print(f"⚠️ Ngrok not ready for Streamlit, retrying ({i+1}/{max_retries})...")
-            time.sleep(1)
-    else:
-        print("❌ Could not create ngrok tunnel for Streamlit.")
-
-    return streamlit_proc
+    return create_ngrok_tunnel(STREAMLIT_PORT)
 
 # -------------------------
 # Main
 # -------------------------
 if __name__ == "__main__":
     try:
-        # Start both servers in parallel threads
+        # Start FastAPI first
         fastapi_thread = threading.Thread(target=start_fastapi)
-        streamlit_thread = threading.Thread(target=start_streamlit)
-
         fastapi_thread.start()
-        streamlit_thread.start()
+        fastapi_thread.join()  # ensure FastAPI is up before Streamlit tunnel
 
-        fastapi_thread.join()
+        # Start Streamlit after FastAPI ngrok ready
+        streamlit_thread = threading.Thread(target=start_streamlit)
+        streamlit_thread.start()
         streamlit_thread.join()
 
-        print("Press Ctrl+C to stop all servers and ngrok...")
+        print("Press Ctrl+C to stop servers and ngrok.")
         while True:
             time.sleep(1)
 
     except KeyboardInterrupt:
-        print("\n🛑 Stopping all servers and ngrok...")
-        # Kill all processes
+        print("\n🛑 Stopping servers and ngrok...")
         ngrok.kill()
         os.system(f"fuser -k {FASTAPI_PORT}/tcp")
         os.system(f"fuser -k {STREAMLIT_PORT}/tcp")

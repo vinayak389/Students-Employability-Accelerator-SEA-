@@ -4,106 +4,134 @@ from dotenv import load_dotenv
 import os
 
 # -------------------------
-# Load .env file
+# Load environment
 # -------------------------
-load_dotenv()  # must be before using OpenAI
+load_dotenv()
 OPENAI_KEY = os.getenv("OPENAI_API_KEY")
-
 if not OPENAI_KEY:
-    raise ValueError("OPENAI_API_KEY not found in environment. Please set it in your .env file.")
+    raise ValueError("OPENAI_API_KEY missing in environment")
 
 # -------------------------
-# LLM (ChatOpenAI)
+# LLM Configuration
 # -------------------------
 llm = ChatOpenAI(
     model="gpt-4.1-mini",
-    temperature=0,
-    openai_api_key=OPENAI_KEY  # explicitly pass the key
+    temperature=0.6,  # Emergent, non-deterministic behavior
+    openai_api_key=OPENAI_KEY
 )
 
-
-def identify_intent(user_message: str,
-                    resume_summary: str | None = None,
-                    role_description: str | None = None):
+# -------------------------
+# Intent Identification
+# -------------------------
+def identify_intent(user_message, resume_summary=None, role_description=None):
     """
-    CrewAI Manager Agent:
-    Identifies the user's primary intent with JOB_DISCOVERY as default
+    Identify user's primary intent in a dynamic, emergent way.
     """
-
-    # -------------------------
-    # Manager Agent
-    # -------------------------
-    manager = Agent(
+    agent = Agent(
         role="Intent Manager",
-        goal="Identify the user's primary intent accurately",
-        backstory="You are responsible for routing user requests to the correct AI agent.",
+        goal="Identify user intent from free-text input",
+        backstory="You are an AI assistant that categorizes user queries into job-related, resume-related, or general career guidance.",
         llm=llm,
-        verbose=True
+        verbose=False
     )
 
-    # -------------------------
-    # Task
-    # -------------------------
-    intent_task = Task(
+    task = Task(
         description=f"""
-Analyze the following user input and identify the user's intent.
+User Message: {user_message}
+Resume: {resume_summary or "Not provided"}
+Role Description: {role_description or "Not provided"}
 
-IMPORTANT RULES:
-- If the user is asking about jobs, roles, opportunities, matching, or exploration → choose JOB_DISCOVERY
-- If a resume is provided but the user does NOT explicitly ask for analysis → still choose JOB_DISCOVERY
-- Choose RESUME_DIAGNOSIS ONLY if the user clearly asks to analyze or evaluate their resume
-- Choose RESUME_IMPROVEMENT ONLY if the user asks how to improve or rewrite resume
-- Default intent should ALWAYS be JOB_DISCOVERY
+First, reason carefully about what the user is trying to achieve.
+Then decide the BEST primary intent.
 
-User Message:
-{user_message}
-
-Resume Summary (if any):
-{resume_summary or "Not provided"}
-
-Role Description (if any):
-{role_description or "Not provided"}
-
-Choose ONE intent label from:
+Possible intents (not limited to):
 - JOB_DISCOVERY
 - RESUME_DIAGNOSIS
 - RESUME_IMPROVEMENT
-- INTERVIEW_PREPARATION
 - CAREER_GUIDANCE
 - UNKNOWN
 
-Respond STRICTLY in this format:
-Intent: <INTENT_LABEL>
-Explanation: <short explanation>
+Format STRICTLY:
+Intent: <LABEL>
+Explanation: <1-2 sentences of reasoning>
 """,
-        expected_output="Intent label and explanation",
-        agent=manager
+        agent=agent
     )
 
-    # -------------------------
-    # Crew
-    # -------------------------
     crew = Crew(
-        agents=[manager],
-        tasks=[intent_task],
+        agents=[agent],
+        tasks=[task],
         process=Process.sequential
     )
 
     result = crew.kickoff()
 
-    # -------------------------
-    # Safe Output Parsing
-    # -------------------------
-    intent = "UNKNOWN"
-    explanation = "Could not determine intent."
+    intent, explanation = "UNKNOWN", "Unable to determine intent"
 
     for line in str(result).splitlines():
         if line.startswith("Intent:"):
             intent = line.replace("Intent:", "").strip()
-        elif line.startswith("Explanation:"):
+        if line.startswith("Explanation:"):
             explanation = line.replace("Explanation:", "").strip()
 
-    return {
-        "identified_intent": intent,
-        "explanation": explanation
-    }
+    return {"identified_intent": intent, "explanation": explanation}
+
+
+# -------------------------
+# Answer User Doubts (Follow-up Q&A)
+# -------------------------
+def answer_user_doubt(question, resume_text=None, job_description=None, analysis=None):
+    """
+    Handles both:
+    1. Resume-related questions (needs analysis)
+    2. General career guidance (no resume required)
+    """
+
+    if analysis is None:
+        # General career guidance
+        system_prompt = f"""
+You are a career guidance AI. Answer the user query in a helpful and actionable way.
+
+User Question: {question}
+"""
+        response = llm.invoke([
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": question}
+        ])
+        return response.content
+
+    # Resume-related question
+    if not all([resume_text, job_description, analysis]):
+        raise ValueError(
+            "Please analyze your resume first using /analyze-resume-jd before asking resume-specific questions."
+        )
+
+    system_prompt = f"""
+You are a career assistant AI.
+
+Answer ONLY using the following information.
+Be emergent, context-aware, and provide actionable advice.
+
+Resume (truncated to 3000 chars):
+{resume_text[:3000]}
+
+Job Description (truncated to 3000 chars):
+{job_description[:3000]}
+
+Analysis Summary:
+Overall Score: {analysis.overall_score}
+ATS Compatibility: {analysis.ats_compatibility}
+Missing Keywords: {analysis.missing_keywords}
+Skill Gaps: {analysis.skill_gaps}
+Weak Sections: {analysis.weak_sections}
+Suggestions: {analysis.improvement_suggestions}
+
+User Question: {question}
+"""
+
+    response = llm.invoke([
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": question}
+    ])
+
+    return response.content

@@ -93,21 +93,33 @@ python ./app_ngrok_run.py
 ```
 
 ## 🧠 How It Works (High Level)
-User interacts with the Streamlit UI (job search, resume upload, etc.)
+1. User interacts with the Streamlit UI (job search, resume upload, career questions, etc.).
+2. Streamlit frontend sends requests to the FastAPI backend.
+3. Ngrok exposes FastAPI and Streamlit to the internet for remote access if needed.
+4. `manager.py` uses CrewAI agents to:
+   - Identify user intent dynamically (job discovery, resume analysis, follow-up Q&A, career guidance)
+   - Process resume ↔ JD analysis
+   - Provide actionable resume improvement suggestions
+   - Answer general career-related questions
+5. `resume_jd_analyzer.py` and `resume_utils.py` handle resume parsing, scoring, and ranking.
+6. Results are returned to Streamlit in real-time and displayed interactively.
+7. The platform provides both deterministic outputs (like resume scoring) and emergent AI recommendations for dynamic career guidance.
 
-Streamlit frontend sends requests to the FastAPI backend
 
-Ngrok exposes FastAPI to the internet for remote access if needed
+---
+## 💬 Follow-up Questions & Career Guidance
+- After analyzing a resume, users can ask targeted questions:
+  - "Why was my resume rejected?"
+  - "Which skills should I focus on?"
+  - "How to improve ATS score?"
+- Users can also ask **general career questions** without uploading a resume.
+- The AI adapts its response based on context and provides actionable advice.
 
-intent_router identifies the user intent (job search, resume analysis, etc.)
-
-CrewAI agents in manager.py process tasks
-
-Tasks and tools in resume_jd_analyzer.py and resume_utils.py handle jobs, resume parsing, scoring, and ranking
-
-Results are returned to Streamlit and displayed to the user in real-time
-
-This architecture enables a lightweight, interactive AI-powered employability platform accessible from any browser.
+---
+## 🔄 Emergent AI Behavior
+- SEA is designed for **dynamic, context-aware interactions**.
+- Recommendations are **not strictly deterministic** — the AI adapts responses based on user input and context.
+- Enables realistic career guidance beyond rigid workflows.
 
 
 ---

@@ -1,8 +1,10 @@
 from langchain_openai import ChatOpenAI
-import os, json
+import os
+import json
 from dotenv import load_dotenv
 
 load_dotenv()
+
 llm = ChatOpenAI(
     model="gpt-4.1-mini",
     temperature=0,
@@ -11,7 +13,8 @@ llm = ChatOpenAI(
 
 def analyze_resume_vs_jd(resume_text: str, job_description: str):
     """
-    Returns resume vs JD analysis with overall score, skill gaps, ATS compatibility, suggestions
+    Returns resume vs JD analysis with overall score, skill gaps,
+    ATS compatibility, and improvement suggestions
     """
 
     prompt = f"""
@@ -49,7 +52,6 @@ Return STRICT JSON:
     try:
         analysis = json.loads(response.content)
     except Exception:
-        # fallback empty structure
         analysis = {
             "overall_score": 0.0,
             "missing_keywords": [],
@@ -60,3 +62,30 @@ Return STRICT JSON:
         }
 
     return analysis
+
+
+def answer_user_doubt(user_question: str, analysis: dict):
+    """
+    Answers user's resume-related questions using existing analysis
+    """
+
+    prompt = f"""
+You are an AI resume coach.
+
+Resume Analysis:
+{json.dumps(analysis, indent=2)}
+
+User Question:
+"{user_question}"
+
+Rules:
+- Clearly explain rejection reasons
+- Refer to missing keywords, ATS score, and skill gaps
+- Give actionable suggestions
+- Keep explanation simple
+
+Answer:
+"""
+
+    response = llm.invoke(prompt)
+    return response.content
